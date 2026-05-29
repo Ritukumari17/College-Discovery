@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  name          String?
+  email         String?        @unique
+  password      String?
+  image         String?
+  role          Role           @default(USER)
+  reviews       Review[]
+  discussions   Discussion[]
+  comments      Comment[]
+  savedColleges SavedCollege[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model College {
+  id              String         @id @default(cuid())
+  name            String
+  location        String
+  establishedYear Int?
+  description     String?        @db.Text
+  ranking         Int?
+  imageUrl        String?
+  ownershipType   String?        // Private, Public
+  acceptedExams   String[]       // e.g. ["JEE Main", "JEE Advanced"]
+  facilities      String[]       // e.g. ["Hostel", "Library", "Gym"]
+  avgPlacement    Float?
+  courses         Course[]
+  reviews         Review[]
+  savedBy         SavedCollege[]
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
+
+model Course {
+  id          String   @id @default(cuid())
+  name        String
+  duration    String
+  fees        Float?
+  collegeId   String
+  college     College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  rating      Int
+  content     String?  @db.Text
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  collegeId   String
+  college     College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+}
+
+model SavedCollege {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  collegeId String
+  college   College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, collegeId])
+}
+
+model Discussion {
+  id        String    @id @default(cuid())
+  title     String
+  content   String    @db.Text
+  upvotes   Int       @default(0)
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments  Comment[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Comment {
+  id           String     @id @default(cuid())
+  content      String     @db.Text
+  upvotes      Int        @default(0)
+  discussionId String
+  discussion   Discussion @relation(fields: [discussionId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+}
+
+model PredictorData {
+  id          String   @id @default(cuid())
+  examName    String
+  collegeName String
+  courseName  String
+  category    String   // General, OBC, SC, ST
+  cutoffRank  Int?
+  cutoffScore Float?
+  year        Int
+}
