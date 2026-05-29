@@ -1,66 +1,72 @@
 # College Discovery Platform
 
-A full-stack, end-to-end college discovery platform allowing users to search, compare, review, and predict college admissions. Built with a scalable and modern tech stack.
+A full-stack, end-to-end college discovery platform allowing users to search, compare, review, and predict college admissions. Built with a highly scalable, modern architecture.
 
-## Tech Stack
-- **Frontend**: Next.js 14 (App Router), React, TailwindCSS, Lucide React
-- **Backend**: Next.js API Routes (Serverless)
-- **Database**: PostgreSQL (via Prisma ORM)
-- **Authentication**: NextAuth.js (Auth.js) with bcrypt password hashing
+## 🏗️ System Architecture
 
-## Features
-- **College Search & Filter**: Find colleges by location, fees, stream, and rankings.
-- **Predictor Tool**: Simulate admission chances based on exam scores and categories.
-- **College Comparison**: Compare up to 4 colleges side-by-side on fees, placements, and facilities.
-- **Forums & Reviews**: Authentic user-generated reviews and discussion boards.
-- **Dashboards**: Separate portals for Users (Saved colleges, settings) and Admins (Analytics, moderation).
+This application utilizes a modern **Full-Stack Monorepo** approach (powered by Next.js 14). This industry-standard pattern allows both the Frontend UI and Backend API services to live in the same repository while maintaining strict architectural separation.
 
-## Local Setup Instructions
+### 🎨 Frontend Architecture (Client-Side)
+The frontend is highly interactive, responsive, and optimized for SEO.
+- **Framework:** React & Next.js 14 (App Router)
+- **Styling:** TailwindCSS for utility-first, responsive design
+- **UI Components:** Custom built, incorporating Lucide React for iconography
+- **Location in Repo:** `src/app/` (Pages), `src/components/` (Reusable UI components)
+- **Key Features:** Side-by-side college comparisons, responsive navigation, aesthetic split-screen authentication.
 
-1. **Install Dependencies**
+### ⚙️ Backend Architecture (Server-Side)
+The backend operates as a scalable API layer that handles business logic, database transactions, and user authentication securely.
+- **API Framework:** Next.js Serverless API Routes
+- **Database:** PostgreSQL
+- **ORM / Schema:** Prisma (`prisma/schema.prisma`)
+- **Authentication:** NextAuth.js (Auth.js) with bcrypt secure password hashing
+- **Location in Repo:** `src/app/api/` (API Endpoints), `prisma/` (Database models)
+- **Key Features:** Secure REST endpoints, user data management, review storage, and predictor algorithms.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+
+- PostgreSQL database
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Ritukumari17/college-discovery.git
+   cd college-discovery
+   ```
+
+2. **Install dependencies:**
    ```bash
    npm install
    ```
 
-2. **Database Configuration**
-   - You need a running PostgreSQL instance. 
-   - Option A: Use Docker Compose.
-     ```bash
-     docker-compose up -d
-     ```
-   - Option B: Create a free cloud database on [Supabase](https://supabase.com/) or [Neon](https://neon.tech/).
-   
-   - Update the `.env` file with your Database connection string:
-     ```env
-     DATABASE_URL="postgresql://user:password@localhost:5432/college_discovery?schema=public"
-     ```
-
-3. **Initialize Prisma**
-   Push the schema to the database and generate the Prisma Client:
-   ```bash
-   npx prisma db push
-   npx prisma generate
+3. **Environment Setup:**
+   Create a `.env` file in the root directory and add your backend database connection:
+   ```env
+   DATABASE_URL="postgresql://user:password@localhost:5432/collegedb"
+   NEXTAUTH_SECRET="your-secret-key"
    ```
 
-4. **Run the Development Server**
+4. **Initialize Database (Backend):**
+   ```bash
+   npx prisma db push
+   ```
+
+5. **Run the Application:**
    ```bash
    npm run dev
    ```
-   The application will be available at [http://localhost:3000](http://localhost:3000).
+   The platform will be available at `http://localhost:3000`.
 
-## Deployment (Production Readiness)
+---
 
-This application is highly optimized for deployment on **Vercel**.
-
-1. Push your repository to GitHub.
-2. Import the project in the Vercel Dashboard.
-3. Configure the following Environment Variables in Vercel:
-   - `DATABASE_URL` (Your production PostgreSQL connection string)
-   - `NEXTAUTH_SECRET` (Generate a random string: `openssl rand -base64 32`)
-   - `NEXTAUTH_URL` (Your production domain, e.g., `https://yourdomain.com`)
-4. Vercel will automatically detect Next.js, run `npm run build`, and deploy your frontend and serverless API routes globally.
-
-## Architecture & Scalability
-- **Server Components**: Leverages React Server Components for fast initial page loads and excellent SEO.
-- **API Fallbacks**: The API routes are designed to gracefully fall back to mock data if the database connection fails, ensuring the UI remains explorable during setup.
-- **Relational Integrity**: Prisma schema enforces strict relations with cascading deletes (e.g., deleting a User removes their Reviews and Comments).
+## 📸 Platform Features
+- **Dynamic Homepage:** Curated colleges and aesthetic study place highlights.
+- **Advanced Search & Filtering:** Filter colleges by fees, location, and rankings.
+- **Interactive Comparisons:** Select multiple colleges and view their stats side-by-side.
+- **Authentication System:** Secure, elegant split-screen login and registration.
+- **User Dashboard:** Save colleges, track comparisons, and manage profiles.
