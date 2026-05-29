@@ -7,8 +7,8 @@ export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
-    const { id } = await params;
     const college = await prisma.college.findUnique({
       where: { id },
       include: {
@@ -31,7 +31,7 @@ export async function GET(
   } catch (error) {
     console.error("Error fetching college:", error);
     // Fallback Mock Data
-    if (params.id === "iit-madras") {
+    if (id === "iit-madras") {
       return NextResponse.json({
         id: "iit-madras",
         name: "IIT Madras - Indian Institute of Technology",
